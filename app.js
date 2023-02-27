@@ -11,8 +11,7 @@ app.use(express.static("public"));
 
 mongoose.set("strictQuery", false);
 // database connection
-mongoose
-  .connect("mongodb://localhost:27017/wikiDB")
+mongoose.connect("mongodb://localhost:27017/wikiDB")
   .then(() => {
     console.log("database connected..");
   })
