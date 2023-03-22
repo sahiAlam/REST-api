@@ -11,7 +11,8 @@ app.use(express.static("public"));
 
 mongoose.set("strictQuery", false);
 // database connection
-mongoose.connect("mongodb://localhost:27017/wikiDB")
+mongoose
+  .connect("mongodb://localhost:27017/wikiDB")
   .then(() => {
     console.log("database connected..");
   })
@@ -25,6 +26,11 @@ const articleSchema = mongoose.Schema({
 });
 // model
 const Article = mongoose.model("Article", articleSchema);
+
+// Home route
+app.get("/", (req, res) => {
+  res.send("Welcome to home page");
+});
 
 ////////////////////////////////Request targeting all Articles ///////////////////////////////
 // GET
@@ -104,7 +110,8 @@ app.delete("/articles", (req, res) => {
 
 ////////////////////////////////Request targeting a specific Articles ///////////////////////////////
 
-app.route("/articles/:articleTitle")
+app
+  .route("/articles/:articleTitle")
   .get((req, res) => {
     Article.find({ title: req.params.articleTitle }, (err, foundArticle) => {
       if (!err) {
@@ -143,19 +150,15 @@ app.route("/articles/:articleTitle")
     );
   })
 
-.delete((req, res) => {
-  Article.deleteOne({ title: req.params.articleTitle }, (err) => {
-    if (!err) {
-      res.send("Successfully deleted the article..");
-    } else {
-      res.send(err);
-    }
+  .delete((req, res) => {
+    Article.deleteOne({ title: req.params.articleTitle }, (err) => {
+      if (!err) {
+        res.send("Successfully deleted the article..");
+      } else {
+        res.send(err);
+      }
+    });
   });
-});
-
-
-
-
 
 // server connected
 app.listen(PORT, () => {
